@@ -1,11 +1,9 @@
 import 'package:chinese_fluent/helper/hanzi_helper.dart';
-import 'package:chinese_fluent/helper/pleco_helper.dart';
 import 'package:chinese_fluent/model/hanzi.dart';
 import 'package:chinese_fluent/model/hanzi_dictionary.dart';
 import 'package:chinese_fluent/screen/hanzi_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class Home extends StatefulWidget {
   @override
@@ -50,7 +48,9 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    final body = Center(child: list);
+    final body = Center(
+      child: dictionary == null ? CircularProgressIndicator() : list,
+    );
 
     return Scaffold(body: SafeArea(child: body));
   }

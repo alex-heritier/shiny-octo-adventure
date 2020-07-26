@@ -1,9 +1,9 @@
 .PHONY: models android ios clean
 
-android: project
+android:
 	flutter build appbundle -v --target-platform=android-arm64
 
-ios: project
+ios:
 	flutter build ios --release -v
 
 models:	

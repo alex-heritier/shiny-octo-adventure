@@ -12,58 +12,92 @@ class HanziDetail extends StatefulWidget {
 }
 
 class _HanziDetailState extends State<HanziDetail> {
+  String get traditionalDisplay =>
+      widget.hanzi.simplified != widget.hanzi.traditional
+          ? "${widget.hanzi.simplified} / ${widget.hanzi.traditional}"
+          : "${widget.hanzi.traditional}";
+
   @override
   Widget build(BuildContext context) {
-    final characterDisplay = Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withOpacity(0.6)),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      width: 128,
-      height: 128,
-      child: Center(
-        child: Text(
-          widget.hanzi.simplified,
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 90),
-        ),
-      ),
+    final characterDisplay = Text(
+      widget.hanzi.simplified,
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 90),
     );
 
-    final info = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text("${widget.hanzi.simplified} / ${widget.hanzi.traditional}"),
-        Text(widget.hanzi.pinyin),
-        Text(widget.hanzi.heisigKeyword),
-        Text(widget.hanzi.studyOrder),
-        Text(widget.hanzi.meaning),
-      ],
-    );
-
-    final topSection = Row(
-      children: <Widget>[
-        Expanded(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: characterDisplay,
+    final info = DefaultTextStyle(
+      style: TextStyle(fontSize: 17, color: Colors.black),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("$traditionalDisplay  –  ${widget.hanzi.heisigKeyword}"),
+          SizedBox(height: 14),
+          RichText(
+            text: TextSpan(
+              style: TextStyle(color: Colors.black, fontSize: 17),
+              children: [
+                TextSpan(text: "def. "),
+                TextSpan(
+                  text: "${widget.hanzi.meaning}",
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
           ),
+        ],
+      ),
+    );
+
+    final topSection = Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: characterDisplay,
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(child: info),
+          ],
         ),
-        Expanded(child: info),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: Text(
+                  widget.hanzi.pinyin,
+                  style: TextStyle(fontSize: 32, letterSpacing: 3),
+                ),
+              ),
+            ),
+            SizedBox(width: 10),
+            Expanded(child: Container()),
+          ],
+        ),
       ],
     );
 
-    final body = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        SizedBox(height: 10),
-        topSection,
-      ],
+    final body = Container(
+      padding: EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(height: 20),
+          topSection,
+        ],
+      ),
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.hanzi.studyOrder}.  ${widget.hanzi.simplified}"),
+        title: Text("${widget.hanzi.studyOrder}.  ${widget.hanzi.simplified} ${widget.hanzi.pinyin}"),
       ),
       body: SafeArea(child: body),
     );

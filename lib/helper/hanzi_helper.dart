@@ -10,8 +10,9 @@ abstract class HanziHelper {
   static Future<HanziDictionary> get dictionary async {
     if (_dictionary == null) {
       String raw = await rootBundle.loadString(Assets.HANZI_LIST);
-      print(raw);
       _dictionary = HanziDictionary.fromJson(jsonDecode(raw));
+      _dictionary.characters.sort((h1, h2) =>
+          int.parse(h1.studyOrder).compareTo(int.parse(h2.studyOrder)));
     }
     return Future.value(_dictionary);
   }
