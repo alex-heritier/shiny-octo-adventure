@@ -33,6 +33,9 @@ dependencies:
   sqflite: 1.3.1
   # sqfentity: 1.4.0 # https://pub.dev/packages/sqfentity
 
+  # Remove accent marks for pinyin
+  diacritic: 0.1.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
