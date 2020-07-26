@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
 
   List<Hanzi> searchResultCharacters;
 
-  List<Hanzi> get characters =>
+  List<Hanzi> get filteredCharacters =>
       searchResultCharacters ?? dictionary?.characters ?? [];
 
   @override
@@ -36,18 +36,18 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void onHanziClick(Hanzi hanzi) {
-    Navigator.of(context)
-        .push(CupertinoPageRoute(builder: (ctx) => HanziDetail(hanzi)));
-  }
+  void onHanziClick(Hanzi hanzi) => Navigator.of(context)
+      .push(CupertinoPageRoute(builder: (ctx) => HanziDetail(hanzi)));
 
   void onSearchChanged(String search) async {
     final int currentID = searchIDTracker++;
 
     List<Hanzi> results = search.isEmpty
         ? null
-        : characters
+        : dictionary.characters
             .where((hanzi) =>
+                hanzi.simplified == search ||
+                hanzi.traditional == search ||
                 diacritic.removeDiacritics(hanzi.pinyin).contains(search))
             .toList();
 
@@ -74,9 +74,9 @@ class _HomeState extends State<Home> {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 6,
       ),
-      itemCount: characters.length,
+      itemCount: filteredCharacters.length,
       itemBuilder: (_, i) => CharacterButton(
-        characters[i],
+        filteredCharacters[i],
         onClick: onHanziClick,
       ),
     );
