@@ -1,4 +1,4 @@
-package com.example.chinese_app
+package com.chinese_fluent
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,7 @@
 .PHONY: models android ios clean
 
 android:
-	flutter build appbundle -v --target-platform=android-arm64
+	flutter build appbundle -v --target-platform=android-arm64 --release
 
 ios:
 	flutter build ios --release -v
