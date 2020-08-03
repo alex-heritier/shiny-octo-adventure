@@ -19,6 +19,12 @@ class Hanzi {
   @JsonKey(name: "pinyin")
   String pinyin;
 
+  @JsonKey(name: "pinyin_toneless")
+  String pinyinToneless;
+
+  @JsonKey(name: "pinyin_tone_num")
+  int pinyinToneNumber;
+
   @JsonKey(name: "heisig_keyword")
   String heisigKeyword;
 
@@ -45,6 +51,13 @@ class Hanzi {
 
   @JsonKey(name: "sound_url")
   String soundUrl;
+
+  @JsonKey(ignore: true)
+  String get pinyinWithNumber => "$pinyinToneless$pinyinToneNumber";
+
+  @JsonKey(ignore: true)
+  String get pinyinWithNumberDisplay =>
+      "$pinyinToneless${pinyinToneNumber == 5 ? "" : pinyinToneNumber}";
 
   // JSON
   Hanzi();

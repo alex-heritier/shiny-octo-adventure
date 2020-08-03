@@ -19,10 +19,10 @@ class _HomeState extends State<Home> {
 
   HanziDictionary dictionary;
 
-  List<Hanzi> searchResultCharacters;
+  List<Hanzi> searchResults;
 
   List<Hanzi> get filteredCharacters =>
-      searchResultCharacters ?? dictionary?.characters?.sublist(0, 250) ?? [];
+      searchResults ?? dictionary?.characters ?? [];
 
   @override
   void initState() {
@@ -48,13 +48,14 @@ class _HomeState extends State<Home> {
         ? null
         : dictionary.characters
             .where((hanzi) =>
+                hanzi.pinyinWithNumber.contains(search) ||
+                hanzi.pinyin.contains(search) ||
                 hanzi.simplified == search ||
-                hanzi.traditional == search ||
-                diacritic.removeDiacritics(hanzi.pinyin).contains(search))
+                hanzi.traditional == search)
             .toList();
 
     if ((currentID + 1) == searchIDTracker)
-      setState(() => this.searchResultCharacters = results);
+      setState(() => this.searchResults = results);
   }
 
   @override
