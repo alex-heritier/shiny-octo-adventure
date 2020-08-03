@@ -13,6 +13,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  static const int HANZI_PER_ROW = 8;
+
   int searchIDTracker = 0;
 
   HanziDictionary dictionary;
@@ -20,7 +22,7 @@ class _HomeState extends State<Home> {
   List<Hanzi> searchResultCharacters;
 
   List<Hanzi> get filteredCharacters =>
-      searchResultCharacters ?? dictionary?.characters ?? [];
+      searchResultCharacters ?? dictionary?.characters?.sublist(0, 250) ?? [];
 
   @override
   void initState() {
@@ -70,9 +72,10 @@ class _HomeState extends State<Home> {
     );
 
     final list = GridView.builder(
-      padding: EdgeInsets.only(bottom: 100),
+      padding: EdgeInsets.only(left: 10, right: 10, bottom: 100),
+      physics: AlwaysScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 6,
+        crossAxisCount: HANZI_PER_ROW,
       ),
       itemCount: filteredCharacters.length,
       itemBuilder: (_, i) => CharacterButton(
@@ -104,21 +107,18 @@ class CharacterButton extends StatelessWidget {
 
   const CharacterButton(this.hanzi, {this.onClick});
 
-//
-//  void onClick() async {
-////    String url = "plecoapi://x-callback-url/s?q=$character";
-//    String url = PlecoHelper.linkFor(hanzi.simplified);
-//    if (await UrlLauncher.canLaunch(url)) UrlLauncher.launch(url);
-//  }
-
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      onPressed: () => this.onClick?.call(hanzi),
+    final text = Center(
       child: Text(
         hanzi.simplified,
         style: TextStyle(fontSize: 24),
       ),
+    );
+
+    return InkWell(
+      onTap: () => this.onClick?.call(hanzi),
+      child: text,
     );
   }
 }
