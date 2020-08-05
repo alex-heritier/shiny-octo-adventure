@@ -1,6 +1,10 @@
+import 'package:chinese_fluent/helper/pleco_helper.dart';
 import 'package:chinese_fluent/model/hanzi.dart';
+import 'package:chinese_fluent/value/assets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HanziDetail extends StatefulWidget {
   final Hanzi hanzi;
@@ -17,12 +21,23 @@ class _HanziDetailState extends State<HanziDetail> {
           ? "${widget.hanzi.simplified} / ${widget.hanzi.traditional}"
           : "${widget.hanzi.traditional}";
 
+  void playAudio() async {
+    AudioPlayer player = AudioPlayer();
+    await player.setUrl(widget.hanzi.soundUrl);
+    await player.play();
+  }
+
   @override
   Widget build(BuildContext context) {
     final characterDisplay = Text(
       widget.hanzi.simplified,
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 90),
+    );
+
+    final audioButton = IconButton(
+      onPressed: playAudio,
+      icon: Icon(Icons.play_arrow),
     );
 
     final info = DefaultTextStyle(
@@ -49,6 +64,7 @@ class _HanziDetailState extends State<HanziDetail> {
               ],
             ),
           ),
+          audioButton,
         ],
       ),
     );
@@ -97,7 +113,17 @@ class _HanziDetailState extends State<HanziDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("${widget.hanzi.studyOrder}.  ${widget.hanzi.simplified} ${widget.hanzi.pinyin}"),
+        title: Text(
+            "${widget.hanzi.studyOrder}.  ${widget.hanzi.simplified} ${widget.hanzi.pinyin}"),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () async {
+              String url = PlecoHelper.linkFor(widget.hanzi.simplified);
+              if (await canLaunch(url)) launch(url);
+            },
+            icon: Image.asset(Assets.PLECO),
+          )
+        ],
       ),
       body: SafeArea(child: body),
     );

@@ -38,8 +38,11 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void onHanziClick(Hanzi hanzi) => Navigator.of(context)
-      .push(CupertinoPageRoute(builder: (ctx) => HanziDetail(hanzi)));
+  void onHanziClick(Hanzi hanzi) async {
+    FocusScope.of(context).unfocus();
+    await Navigator.of(context)
+        .push(CupertinoPageRoute(builder: (ctx) => HanziDetail(hanzi)));
+  }
 
   void onSearchChanged(String search) async {
     final int currentID = searchIDTracker++;
@@ -72,17 +75,28 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    final list = GridView.builder(
+//    final list = GridView.builder(
+//      padding: EdgeInsets.only(left: 10, right: 10, bottom: 100),
+//      physics: AlwaysScrollableScrollPhysics(),
+//      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//        crossAxisCount: HANZI_PER_ROW,
+//      ),
+//      itemCount: filteredCharacters.length,
+//      itemBuilder: (_, i) => CharacterButton(
+//        filteredCharacters[i],
+//        onClick: onHanziClick,
+//      ),
+//    );
+
+    final list = GridView(
       padding: EdgeInsets.only(left: 10, right: 10, bottom: 100),
       physics: AlwaysScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: HANZI_PER_ROW,
       ),
-      itemCount: filteredCharacters.length,
-      itemBuilder: (_, i) => CharacterButton(
-        filteredCharacters[i],
-        onClick: onHanziClick,
-      ),
+      children: filteredCharacters
+          .map((char) => CharacterButton(char, onClick: onHanziClick))
+          .toList(),
     );
 
     final body = dictionary == null
