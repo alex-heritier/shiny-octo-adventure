@@ -2,6 +2,7 @@
 
 android:
 	flutter build appbundle -v --target-platform=android-arm64 --release
+	open build/app/outputs/bundle/release
 
 ios:
 	flutter build ios --release -v

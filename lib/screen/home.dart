@@ -1,9 +1,8 @@
 import 'package:chinese_fluent/helper/hanzi_helper.dart';
 import 'package:chinese_fluent/model/hanzi.dart';
 import 'package:chinese_fluent/model/hanzi_dictionary.dart';
-import 'package:chinese_fluent/screen/hanzi_detail.dart';
+import 'package:chinese_fluent/screen/card_detail/card_detail.dart';
 import 'package:chinese_fluent/widget/keyboard_killer.dart';
-import 'package:diacritic/diacritic.dart' as diacritic;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +40,7 @@ class _HomeState extends State<Home> {
   void onHanziClick(Hanzi hanzi) async {
     FocusScope.of(context).unfocus();
     await Navigator.of(context)
-        .push(CupertinoPageRoute(builder: (ctx) => HanziDetail(hanzi)));
+        .push(MaterialPageRoute(builder: (ctx) => CardDetail(hanzi)));
   }
 
   void onSearchChanged(String search) async {
@@ -125,10 +124,12 @@ class CharacterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = Center(
-      child: Text(
-        hanzi.simplified,
-        style: TextStyle(fontSize: 24),
-      ),
+      child: hanzi.isPrimitive
+          ? Image.asset(hanzi.fullImageAsset, width: 36, height: 36)
+          : Text(
+              hanzi.simplified,
+              style: TextStyle(fontSize: 24),
+            ),
     );
 
     return InkWell(

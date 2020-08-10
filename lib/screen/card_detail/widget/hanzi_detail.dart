@@ -1,36 +1,28 @@
-import 'package:chinese_fluent/helper/pleco_helper.dart';
 import 'package:chinese_fluent/model/hanzi.dart';
-import 'package:chinese_fluent/value/assets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class HanziDetail extends StatefulWidget {
+class HanziDetail extends StatelessWidget {
   final Hanzi hanzi;
 
   const HanziDetail(this.hanzi);
 
-  @override
-  _HanziDetailState createState() => _HanziDetailState();
-}
-
-class _HanziDetailState extends State<HanziDetail> {
-  String get traditionalDisplay =>
-      widget.hanzi.simplified != widget.hanzi.traditional
-          ? "${widget.hanzi.simplified} / ${widget.hanzi.traditional}"
-          : "${widget.hanzi.traditional}";
+  String get traditionalDisplay => hanzi.simplified != hanzi.traditional
+      ? "${hanzi.simplified} / ${hanzi.traditional}"
+      : "${hanzi.traditional}";
 
   void playAudio() async {
+    print(hanzi.soundUrl);
     AudioPlayer player = AudioPlayer();
-    await player.setUrl(widget.hanzi.soundUrl);
+    await player.setUrl(hanzi.soundUrl);
     await player.play();
+    await player.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final characterDisplay = Text(
-      widget.hanzi.simplified,
+      hanzi.simplified,
       textAlign: TextAlign.center,
       style: TextStyle(fontSize: 90),
     );
@@ -47,7 +39,7 @@ class _HanziDetailState extends State<HanziDetail> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("$traditionalDisplay  –  ${widget.hanzi.heisigKeyword}"),
+          Text("$traditionalDisplay  –  ${hanzi.heisigKeyword}"),
           SizedBox(height: 14),
           RichText(
             text: TextSpan(
@@ -55,7 +47,7 @@ class _HanziDetailState extends State<HanziDetail> {
               children: [
                 TextSpan(text: "def. "),
                 TextSpan(
-                  text: "${widget.hanzi.meaning}",
+                  text: "${hanzi.meaning}",
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.black,
@@ -69,7 +61,7 @@ class _HanziDetailState extends State<HanziDetail> {
       ),
     );
 
-    final topSection = Column(
+    return Column(
       children: <Widget>[
         Row(
           children: <Widget>[
@@ -88,7 +80,7 @@ class _HanziDetailState extends State<HanziDetail> {
             Expanded(
               child: Center(
                 child: Text(
-                  widget.hanzi.pinyin,
+                  hanzi.pinyin,
                   style: TextStyle(fontSize: 32, letterSpacing: 3),
                 ),
               ),
@@ -98,34 +90,6 @@ class _HanziDetailState extends State<HanziDetail> {
           ],
         ),
       ],
-    );
-
-    final body = Container(
-      padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          SizedBox(height: 20),
-          topSection,
-        ],
-      ),
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-            "${widget.hanzi.studyOrder}.  ${widget.hanzi.simplified} ${widget.hanzi.pinyin}"),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () async {
-              String url = PlecoHelper.linkFor(widget.hanzi.simplified);
-              if (await canLaunch(url)) launch(url);
-            },
-            icon: Image.asset(Assets.PLECO),
-          )
-        ],
-      ),
-      body: SafeArea(child: body),
     );
   }
 }

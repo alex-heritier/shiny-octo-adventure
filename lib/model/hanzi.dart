@@ -1,9 +1,16 @@
+import 'package:chinese_fluent/value/assets.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'hanzi.g.dart';
 
 @JsonSerializable()
 class Hanzi {
+  static const int TYPE_CHARACTER = 0;
+  static const int TYPE_PRIMITIVE = 1;
+
+  @JsonKey(name: "type")
+  int type;
+
   @JsonKey(name: "traditional")
   String traditional;
 
@@ -52,12 +59,22 @@ class Hanzi {
   @JsonKey(name: "sound_url")
   String soundUrl;
 
+  @JsonKey(name: "image_asset")
+  String imageAsset;
+
   @JsonKey(ignore: true)
   String get pinyinWithNumber => "$pinyinToneless$pinyinToneNumber";
 
   @JsonKey(ignore: true)
   String get pinyinWithNumberDisplay =>
       "$pinyinToneless${pinyinToneNumber == 5 ? "" : pinyinToneNumber}";
+
+  @JsonKey(ignore: true)
+  bool get isPrimitive => this.type == TYPE_PRIMITIVE;
+
+  @JsonKey(ignore: true)
+  String get fullImageAsset =>
+      "${Assets.BASE}/${Assets.HEISIG_PRIMITIVE}/$imageAsset";
 
   // JSON
   Hanzi();
