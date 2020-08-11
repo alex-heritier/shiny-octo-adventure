@@ -18,7 +18,7 @@ class Hanzi {
   String simplified;
 
   @JsonKey(name: "study_order")
-  String studyOrder;
+  int studyOrder;
 
   @JsonKey(name: "variants")
   String variants;

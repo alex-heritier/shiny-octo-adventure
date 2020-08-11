@@ -11,8 +11,8 @@ abstract class HanziHelper {
     if (_dictionary == null) {
       String raw = await rootBundle.loadString(Assets.HANZI_LIST);
       _dictionary = HanziDictionary.fromJson(jsonDecode(raw));
-      _dictionary.characters.sort((h1, h2) =>
-          int.parse(h1.studyOrder).compareTo(int.parse(h2.studyOrder)));
+      _dictionary.characters
+          .sort((h1, h2) => h1.studyOrder.compareTo(h2.studyOrder));
     }
     return Future.value(_dictionary);
   }

@@ -38,6 +38,8 @@ class _HomeState extends State<Home> {
   }
 
   void onHanziClick(Hanzi hanzi) async {
+    if (hanzi.isPrimitive) return;
+
     FocusScope.of(context).unfocus();
     await Navigator.of(context)
         .push(MaterialPageRoute(builder: (ctx) => CardDetail(hanzi)));
